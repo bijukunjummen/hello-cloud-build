@@ -1,0 +1,7 @@
+steps:
+  - name: 'bash'
+    id: A
+    args: ['echo', 'Step A']
+  - name: 'bash'
+    id: B
+    args: ['echo', 'Step B']
