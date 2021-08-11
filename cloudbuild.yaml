@@ -1,7 +1,15 @@
 steps:
   - name: 'bash'
     id: A
-    args: ['echo', 'Step A']
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        echo "hello" > /workspace/saved.txt
   - name: 'bash'
     id: B
-    args: ['echo', 'Step B']
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        cat /workspace/saved.txt
