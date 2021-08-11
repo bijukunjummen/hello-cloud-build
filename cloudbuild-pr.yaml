@@ -1,0 +1,5 @@
+steps:
+  - name: openjdk:11
+    id: test
+    entrypoint: "./gradlew"
+    args: [ "check" ]

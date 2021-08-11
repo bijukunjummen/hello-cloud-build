@@ -1,15 +1,11 @@
 steps:
-  - name: 'bash'
-    id: A
-    entrypoint: bash
-    args:
-      - -c
-      - |
-        echo "hello" > /workspace/saved.txt
-  - name: 'bash'
-    id: B
-    entrypoint: bash
-    args:
-      - -c
-      - |
-        cat /workspace/saved.txt
+  - name: openjdk:11
+    id: test
+    entrypoint: "./gradlew"
+    args: [ "check" ]
+  - name: openjdk:11
+    id: build-image
+    entrypoint: "./gradlew"
+    args: [ "jib:build", "--image=gcr.io/$PROJECT_ID/hello-cloud-build:$SHORT_SHA" ]
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: [ 'run', 'deploy', "--image=gcr.io/$PROJECT_ID/hello-cloud-build:$SHORT_SHA", '--platform=managed', '--project=$PROJECT_ID', '--region=us-central1', '--allow-unauthenticated', '--memory=256Mi', '--set-env-vars=SPRING_PROFILES_ACTIVE=gcp', 'hello-cloud-build' ]
