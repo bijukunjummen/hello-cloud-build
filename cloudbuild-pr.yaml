@@ -3,6 +3,5 @@ steps:
     id: test
     entrypoint: "./gradlew"
     args: [ "check" ]
-  - name: 'bash'
-    id: hello
-    args: ['echo', 'Check if it gets called..']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: [ 'run', 'services', "delete", 'hello-cloud-build', '--region=us-central1', "--quiet"]
