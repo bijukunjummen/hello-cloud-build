@@ -3,3 +3,6 @@ steps:
     id: test
     entrypoint: "./gradlew"
     args: [ "check" ]
+  - name: 'bash'
+      id: hello
+      args: ['echo', 'Check if it gets called..']
