@@ -1,5 +1,57 @@
 steps:
+  - waitFor: ['-']
+    name: gcr.io/cloud-builders/gsutil
+    dir: /userhome
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        gsutil ls -b gs://${_GCS_CACHE_BUCKET} || gsutil mb -l gs://${_GCS_CACHE_BUCKET}
+
+        (
+          gsutil cp gs://${_GCS_CACHE_BUCKET}/gradle-cache.tar.gz /tmp/gradle-cache.tar.gz &&
+          tar -xzf /tmp/gradle-cache.tar.gz
+        ) || echo 'Cache not found'
+    volumes:
+      - name: user.home
+        path: /userhome
   - name: openjdk:11
     id: test
-    entrypoint: "./gradlew"
-    args: [ "check" ]
+    entrypoint: "/bin/bash"
+    args:
+      - '-c'
+      - |-
+        set -x
+        export USER_HOME="/userhome"
+        M2_HOME="$${HOME}/.m2"
+        M2_CACHE="$${USER_HOME}/maven"
+        GRADLE_HOME="$${HOME}/.gradle"
+        GRADLE_CACHE="$${USER_HOME}/gradle"
+
+        echo "Generating symbolic links for caches"
+        mkdir -p $${M2_CACHE}
+        mkdir -p $${GRADLE_CACHE}
+
+
+        [[ -d "$${M2_CACHE}" && ! -d "$${M2_HOME}" ]] && ln -s "$${M2_CACHE}" "$${M2_HOME}"
+        [[ -d "$${GRADLE_CACHE}" && ! -d "$${GRADLE_HOME}" ]] && ln -s "$${GRADLE_CACHE}" "$${GRADLE_HOME}"
+        env
+        ./gradlew check
+    volumes:
+      - name: user.home
+        path: /userhome
+  - waitFor:
+      - test
+    name: gcr.io/cloud-builders/gsutil
+    dir: /userhome
+    entrypoint: bash
+    args:
+      - -c
+      - |
+        tar -czf /tmp/gradle-cache.tar.gz gradle/ &&
+        gsutil cp /tmp/gradle-cache.tar.gz gs://${_GCS_CACHE_BUCKET}/gradle-cache.tar.gz
+    volumes:
+      - name: user.home
+        path: /userhome
+substitutions:
+  _GCS_CACHE_BUCKET: <some bucket for caching gradle file>
