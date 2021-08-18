@@ -1,5 +1,5 @@
 steps:
-  - waitFor: ['-']
+  - waitFor: [ '-' ]
     name: gcr.io/cloud-builders/gsutil
     dir: /cachinghome
     entrypoint: bash
@@ -23,7 +23,7 @@ steps:
       - |-
         set -x
         export CACHING_HOME="/cachinghome"
-        USER_HOME=$( echo ~$$USER )
+        USER_HOME="/root"
         M2_HOME="$${USER_HOME}/.m2"
         M2_CACHE="$${CACHING_HOME}/maven"
         GRADLE_HOME="$${USER_HOME}/.gradle"
