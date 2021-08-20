@@ -13,12 +13,22 @@ class GreetingsControllerTest {
     private lateinit var webTestClient: WebTestClient
 
     @Test
-    fun testGreetingsEndpoint() {
+    fun `greetings with canned message`() {
         webTestClient.get()
             .uri("/greetings")
             .accept(MediaType.APPLICATION_JSON)
             .exchange()
             .expectBody()
             .jsonPath("$.payload").isEqualTo("hello")
+    }
+
+    @Test
+    fun `greetings with user provided payload`() {
+        webTestClient.get()
+            .uri("/greetings/morning")
+            .accept(MediaType.APPLICATION_JSON)
+            .exchange()
+            .expectBody()
+            .jsonPath("$.payload").isEqualTo("morning")
     }
 }
