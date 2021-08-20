@@ -14,6 +14,17 @@ steps:
       - 'pipefail'
       - '-c'
       - |-
+        export USER_HOME="/userhome"
+
+        M2_HOME="${HOME}/.m2"
+        M2_CACHE="${USER_HOME}/maven"
+        GRADLE_HOME="${HOME}/.gradle"
+        GRADLE_CACHE="${USER_HOME}/gradle"
+
+        echo "Generating symbolic links for caches"
+
+        [[ -d "${M2_CACHE}" && ! -d "${M2_HOME}" ]] && ln -s "${M2_CACHE}" "${M2_HOME}"
+        [[ -d "${GRADLE_CACHE}" && ! -d "${GRADLE_HOME}" ]] && ln -s "${GRADLE_CACHE}" "${GRADLE_HOME}"
         ./gradlew jib --image=gcr.io/$PROJECT_ID/hello-cloud-build:$SHORT_SHA
     volumes:
       - name: user.home
