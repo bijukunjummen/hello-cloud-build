@@ -69,8 +69,8 @@ steps:
     id: deploy
     args: [ 'run', 'deploy', "--image=gcr.io/$PROJECT_ID/hello-cloud-build:$SHORT_SHA", '--platform=managed', '--project=$PROJECT_ID', '--region=us-central1', '--allow-unauthenticated', '--memory=256Mi', '--set-env-vars=SPRING_PROFILES_ACTIVE=gcp', 'hello-cloud-build' ]
     volumes:
-      - name: user.home
-        path: /userhome
+      - name: caching.home
+        path: /cachinghome
   - waitFor:
       - deploy
     name: gcr.io/cloud-builders/gsutil
