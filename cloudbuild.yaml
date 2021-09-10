@@ -6,7 +6,7 @@ steps:
     args:
       - -c
       - |
-        gsutil ls -b gs://${_GCS_CACHE_BUCKET} || gsutil mb -l gs://${_GCS_CACHE_BUCKET}
+        gsutil ls -b gs://${_GCS_CACHE_BUCKET} || gsutil mb gs://${_GCS_CACHE_BUCKET}
 
         (
           gsutil cp gs://${_GCS_CACHE_BUCKET}/gradle-cache.tar.gz /tmp/gradle-cache.tar.gz &&
