@@ -6,7 +6,7 @@ steps:
     args:
       - -c
       - |
-        gsutil ls -b gs://${_GCS_CACHE_BUCKET} || gsutil mb -l gs://${_GCS_CACHE_BUCKET}
+        gsutil ls -b gs://${_GCS_CACHE_BUCKET} || gsutil mb gs://${_GCS_CACHE_BUCKET}
 
         (
           gsutil cp gs://${_GCS_CACHE_BUCKET}/gradle-cache.tar.gz /tmp/gradle-cache.tar.gz &&
@@ -35,7 +35,7 @@ steps:
 
         [[ -d "$${M2_CACHE}" && ! -d "$${M2_HOME}" ]] && ln -s "$${M2_CACHE}" "$${M2_HOME}"
         [[ -d "$${GRADLE_CACHE}" && ! -d "$${GRADLE_HOME}" ]] && ln -s "$${GRADLE_CACHE}" "$${GRADLE_HOME}"
-        ./gradlew check
+        ./gradlew check || echo "fail" > /workspace/build-status.txt
     volumes:
       - name: caching.home
         path: /cachinghome
@@ -52,5 +52,14 @@ steps:
     volumes:
       - name: caching.home
         path: /cachinghome
+  - id: Bubble result
+    name: openjdk:11
+    entrypoint: "/bin/bash"
+    args:
+      - '-c'
+      - |
+        if [[ $(< /workspace/build-status.txt) == "fail" ]]; then
+          exit 1
+        fi
 substitutions:
   _GCS_CACHE_BUCKET: <some bucket for caching gradle file>
