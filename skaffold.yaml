@@ -12,3 +12,8 @@ deploy:
     manifests:
     - kubernetes/hello-deployment.yaml
     - kubernetes/hello-service.yaml
+profiles:
+  - name: gcp
+    build:
+      artifacts:
+        - image: gcr.io/$PROJECT_ID/hello-cloud-build-skaf
