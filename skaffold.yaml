@@ -16,4 +16,6 @@ profiles:
   - name: gcp
     build:
       artifacts:
-        - image: gcr.io/$PROJECT_ID/hello-cloud-build-skaf
+        - image: gcr.io/biju-altostrat-demo/hello-cloud-build-skaf
+          buildpacks:
+            builder: gcr.io/buildpacks/builder:v1
