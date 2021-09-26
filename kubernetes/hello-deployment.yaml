@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-cloud-build-deployment
+  labels:
+    app: hello-cloud-build-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-cloud-build
+  template:
+    metadata:
+      labels:
+        app: hello-cloud-build
+    spec:
+      containers:
+        - name: hello-cloud-build
+          image: hello-cloud-build
+          ports:
+            - containerPort: 8080

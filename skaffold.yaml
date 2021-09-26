@@ -1,0 +1,14 @@
+apiVersion: skaffold/v2beta23
+kind: Config
+metadata:
+  name: hello-cloud-build
+build:
+  artifacts:
+  - image: hello-cloud-build
+    buildpacks:
+      builder: gcr.io/buildpacks/builder:v1
+deploy:
+  kubectl:
+    manifests:
+    - kubernetes/hello-deployment.yaml
+    - kubernetes/hello-service.yaml
