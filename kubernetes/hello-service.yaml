@@ -5,7 +5,7 @@ metadata:
   labels:
     app: hello-cloud-build-service
 spec:
-  clusterIP: None
+  type: LoadBalancer
   ports:
     - port: 8080
       name: hello-cloud-build

@@ -9,7 +9,7 @@ steps:
         gsutil ls -b gs://${_GCS_CACHE_BUCKET} || gsutil mb -l gs://${_GCS_CACHE_BUCKET}
 
         (
-          gsutil cp gs://${_GCS_CACHE_BUCKET}/gradle-cache.tar.gz /tmp/gradle-cache.tar.gz &&
+          gsutil cp gs://${_GCS_CACHE_BUCKET}/${_GCS_CACHE_FILE}.tar.gz /tmp/gradle-cache.tar.gz &&
           tar -xzf /tmp/gradle-cache.tar.gz
         ) || echo 'Cache not found'
     volumes:
@@ -48,9 +48,10 @@ steps:
       - -c
       - |
         tar -czf /tmp/gradle-cache.tar.gz gradle/ &&
-        gsutil cp /tmp/gradle-cache.tar.gz gs://${_GCS_CACHE_BUCKET}/gradle-cache.tar.gz
+        gsutil cp /tmp/gradle-cache.tar.gz gs://${_GCS_CACHE_BUCKET}/${_GCS_CACHE_FILE}.tar.gz
     volumes:
       - name: caching.home
         path: /cachinghome
 substitutions:
   _GCS_CACHE_BUCKET: <some bucket for caching gradle file>
+  _GCS_CACHE_FILE: <file name to cache content in>
