@@ -4,7 +4,7 @@ metadata:
   name: hello-cloud-build
 build:
   artifacts:
-  - image: hello-cloud-build
+  - image: hello-cloud-build-skaf
     buildpacks:
       builder: gcr.io/buildpacks/builder:v1
 deploy:
