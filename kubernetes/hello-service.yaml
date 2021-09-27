@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-cloud-build-service
+  labels:
+    app: hello-cloud-build-service
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8080
+      name: hello-cloud-build
+  selector:
+    app: hello-cloud-build
