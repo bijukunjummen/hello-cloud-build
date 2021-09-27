@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: hello-cloud-build
-          image: IMAGE_NAME
+          image: hello-cloud-build-skaf
           ports:
             - containerPort: 8080
