@@ -16,6 +16,6 @@ spec:
     spec:
       containers:
         - name: hello-cloud-build
-          image: hello-cloud-build
+          image: {{.IMAGE_NAME}}
           ports:
             - containerPort: 8080
